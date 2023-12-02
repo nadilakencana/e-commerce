@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'no_hp',
+        'image',
+        'alamat'
     ];
 
     /**
@@ -42,4 +45,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+
+    public function order(){
+        return $this->hasMany(Orders::class, 'id', 'id_user');
+    }
 }
