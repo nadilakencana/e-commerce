@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthAdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CetagoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,6 +46,20 @@ Route::controller(HomeController::class)->group(function(){
     Route::get('Detail-product/{slug}', 'DetailProduct')->name('detail-product');
 });
 
+Route::controller(CartController::class)->group(function(){
+    Route::post('addToCart', 'addToCart')->name('addToCart');
+    Route::get('Detail-cart', 'detailCart')->name('detail-cart');
+    Route::post('Delete-item-cart', 'deleteItemCart')->name('delete-item-cart');
+    Route::post('Cekout', 'cekout')->name('cekout');
+});
+
+
+Route::middleware(['customer'])->group(function(){
+    Route::controller(ProfileUserController::class)->group(function(){
+        Route::get('profile', 'profile')->name('user_profile');
+        Route::post('update-profile/{id}', 'UpdateUser')->name('update-user');
+    });
+});
 
 
 Route::middleware(['admins'])->group(function(){
@@ -69,6 +85,10 @@ Route::middleware(['admins'])->group(function(){
 
     Route::controller(OrderController::class)->group(function(){
         Route::get('data-order', 'DataOrder')->name('order');
+        Route::post('approve-order/{id}', 'approveOrder')->name('Approve');
+        Route::post('finish-order/{id}', 'FinishOrder')->name('Finish');
+        Route::get('delete-order/{id}', 'DeleteOrder')->name('delete-order');
+        Route::get('invoice-order/{id}', 'invoice')->name('invoice');
     });
 });
 

@@ -20,12 +20,12 @@
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-               <p>Data Orders</p>
+                <p>Data Orders</p>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1">
                     @php
-                        $no = 1;
+                    $no = 1;
                     @endphp
                     <thead>
                         <tr>
@@ -48,9 +48,99 @@
                             <td>{{ $order->status }}</td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="" class="btn btn-success">Detail</a>
-                                    <a href="" class="btn btn-success">Invoice</a>
-                                    <a href="" class="btn btn-danger">Delete</a>
+                                    <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $order->id }}">Detail</a>
+                                    <a href="{{ route('invoice', encrypt($order->id)) }}" class="btn btn-primary">Invoice</a>
+                                    <a href="{{ route('delete-order', encrypt($order->id)) }}" class="btn btn-danger">Delete</a>
+
+
+                                    <div class="modal fade" id="exampleModal-{{ $order->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" style="width: 718px; max-width:800px">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detail Order
+                                                    </h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="content-detail-order mb-4">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="data-customer d-flex gap-3">
+                                                                    <label for="" style="width: 50%">Customer Name</label>
+                                                                    <div class="dt-customer">:{{ $order->user->name }}</div>
+                                                                </div>
+                                                                <div class="data-customer d-flex gap-3">
+                                                                    <label for="" style="width: 50%">Phone</label>
+                                                                    <div class="dt-customer">:{{ $order->user->no_hp }}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="data-customer d-flex gap-3">
+                                                                    <label for="" style="width: 50%">Address</label>
+                                                                    <div class="dt-customer">:{{ $order->user->alamat }}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <table class="table w-100">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Product</th>
+                                                                <th>Qty</th>
+                                                                <th>Price</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($order->details as $detail )
+                                                            <tr>
+                                                                <td>
+                                                                    <div class="product">
+                                                                        <p class="cl-dark">{{ $detail->product->name }}</p>
+
+                                                                        <div class="variasi">
+                                                                            <div class="var-pro-detail d-flex gap-3">
+                                                                                <label for="">Color</label>
+                                                                                <div class="dt-var">: {{
+                                                                                    $detail->warna->name }}</div>
+                                                                            </div>
+                                                                            <div class="var-pro-detail d-flex gap-3">
+                                                                                <label for="">Size</label>
+                                                                                <div class="dt-var">: {{
+                                                                                    $detail->ukuran->ukuran }}</div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </td>
+                                                                <td>{{ $detail->qty }}</td>
+                                                                <td>Rp. {{ number_format ($detail->harga_product, 0,
+                                                                    ',', '.') }}</td>
+                                                                <td>Rp. {{ number_format ($detail->total_item,
+                                                                    0,',','.') }}</td>
+                                                            </tr>
+                                                            @endforeach
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+
+                                                    @if($order->status == 'OnProses')
+                                                    <button type="button" class="btn btn-primary approve"
+                                                        data-bs-dismiss="modal" xid="{{ $order->id }}">Approve</button>
+                                                    @elseif($order->status == 'Order Approve')
+                                                    <button type="button" class="btn btn-primary finish"
+                                                        data-bs-dismiss="modal" xid="{{ $order->id }}">Finish</button>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -64,3 +154,44 @@
     </section>
 </div>
 @endsection
+@section('script')
+<script>
+    $(()=>{
+        $('.approve').on('click', function(){
+            var id = $(this).attr('xid');
+            UpdateStatus(id, 'approve');
+        });
+
+        $('.finish').on('click', function(){
+            var id = $(this).attr('xid');
+            UpdateStatus(id, 'finish');
+        });
+
+        function UpdateStatus(id, type){
+
+            var Url = "{{ route('Approve', '') }}" + '/'+ id;
+
+            if(type == 'finish'){
+                var Url = "{{ route('Finish', '') }}" + '/'+ id;
+            }
+
+            $.ajax({
+                url: Url,
+                method: 'POST',
+                type: 'json',
+                data:{
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(data){
+                    console.log(data);
+                    location.reload();
+                }
+            }).fail(function(data){
+                console.log(data);
+            });
+        }
+    })
+
+
+</script>
+@stop

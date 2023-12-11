@@ -16,6 +16,11 @@
 
 <body>
     <div class="container auth-login pt-4 mt-4">
+        @if(session()->has('faild'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('faild') }}
+            </div>
+        @endif
         <div class="content-log">
             <div class="card login">
                 <div class="row">

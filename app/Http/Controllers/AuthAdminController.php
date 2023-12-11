@@ -50,7 +50,12 @@ class AuthAdminController extends Controller
             'password' => bcrypt( $request->password),
         ]);
 
-        return redirect()->route('login')->with('success', 'Selamt kamu berhasil Regist');
+        if($admin){
+            return redirect()->route('login')->with('success', 'Selamt kamu berhasil Regist');
+        }else{
+            return redirect()->back()->with('faild', 'Cek kembali data kamu');
+        }
+
     }
 
     public function logout(Request $request){
@@ -109,8 +114,13 @@ class AuthAdminController extends Controller
             'alamat' => $request->alamat,
             'password' => bcrypt( $request->password),
         ]);
+        if($User){
+             return redirect()->route('login-user')->with('success', 'Selamt kamu berhasil Regist');
 
-        return redirect()->route('login-user')->with('success', 'Selamt kamu berhasil Regist');
+        }else{
+             return redirect()->back()->with('faild', 'Cek Kembali data anda');
+
+        }
     }
 
     public function logoutUser(Request $request){

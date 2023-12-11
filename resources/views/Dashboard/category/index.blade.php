@@ -1,6 +1,11 @@
 @extends('Dashboard.layoute.masterLayoute')
 @section('content')
 <div class="page-heading">
+    @if(session()->has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+    @endif
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">

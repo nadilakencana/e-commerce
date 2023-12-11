@@ -1,6 +1,11 @@
 @extends('Dashboard.layoute.masterLayoute')
 @section('content')
 <div class="page-heading">
+     @if(session()->has('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+    @endif
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
@@ -63,7 +68,7 @@
                                         <a href="{{ route('edit-product', encrypt($pro->id)) }}" class="btn btn-warning">Edit</a>
                                         <a href="{{ route('delete-product', encrypt($pro->id)) }}" class="btn btn-danger">Delete</a>
                                     </div>
-                                   
+
 
                                     <!--Basic Modal -->
                                     <div class="modal fade text-left" id="default-{{ $pro->id }}" tabindex="-1" role="dialog"
@@ -94,7 +99,7 @@
                                                             </div>
                                                             <div class="data-product d-flex gap-4">
                                                                 <label for="" style="width: 50%">Color Product</label>
-                                                                <div class="dt-product">: 
+                                                                <div class="dt-product">:
                                                                     <ul>
                                                                         @foreach ($pro->warna as $color)
                                                                             <li>{{ $color->name }}</li>
@@ -104,7 +109,7 @@
                                                             </div>
                                                             <div class="data-product d-flex gap-4">
                                                                 <label for="" style="width: 50%">Size Product</label>
-                                                                <div class="dt-product">: 
+                                                                <div class="dt-product">:
                                                                     <ul>
                                                                         @foreach ($pro->ukuran as $size)
                                                                             <li>{{ $size->ukuran }}</li>
@@ -112,7 +117,7 @@
                                                                     </ul>
                                                                 </div>
                                                             </div>
-                                                           
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -121,7 +126,7 @@
                                                         <i class="bx bx-x d-block d-sm-none"></i>
                                                         <span class="d-none d-sm-block">Close</span>
                                                     </button>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>

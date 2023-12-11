@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-
-class AdminMiddleware
+use Illuminate\Support\Facades\Auth;
+class CustomerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,14 +15,9 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('admins')->check(['email' => $request->email, 'password' => $request->password])){
-            return redirect('/login-admin');
+         if(!Auth::guard('web')->check(['email' => $request->email, 'password' => $request->password])){
+            return redirect('/login');
         }
-
-        if(Auth::guard('admins')->check(['email' => $request->email, 'password' => $request->password])){
-            config(['session.lifetime' => 120]);
-        }
-
         return $next($request);
     }
 }

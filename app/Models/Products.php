@@ -12,6 +12,13 @@ class Products extends Model
     protected $guarded = [];
 
 
+    public function scopeFilter($query, array $filter){
+        $query->when($filter['search']??false, function($query, $search){
+            return $query->where('name', 'like', '%'.$search.'%');
+        });
+    }
+
+
     public function category(){
         return $this->belongsTo(categorys::class, 'id_category', 'id');
     }

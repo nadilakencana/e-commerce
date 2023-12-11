@@ -11,6 +11,10 @@ class Orders extends Model
     protected $guarded = [];
 
     public function user(){
-        return $this->belongsTo(User::class, 'id', 'id_user');
+        return $this->belongsTo(User::class,  'id_user','id');
+    }
+
+    public function details(){
+        return $this->hasMany(Detail_Orders::class, 'id_order', 'id');
     }
 }

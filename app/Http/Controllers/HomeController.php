@@ -14,14 +14,14 @@ class HomeController extends Controller
     }
 
     public function allProduct(){
-        $product = Products::paginate(9);
+        $product = Products::latest()->filter(request(['search']))->paginate(6);
         $category = categorys::all();
         return view('User.Home.productAll',compact('product', 'category'));
     }
 
     public function CategoryProduct($slug){
         $cat_pro = categorys::where('slug_category', $slug)->first();
-        $product = Products::where('id_category', $cat_pro->id)->get();
+        $product = Products::where('id_category', $cat_pro->id)->paginate(6);
         $category = categorys::all();
 
         return view('User.Home.category_product', compact('cat_pro', 'product', 'category'));

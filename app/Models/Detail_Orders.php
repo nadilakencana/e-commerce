@@ -13,18 +13,18 @@ class Detail_Orders extends Model
 
 
     public function order (){
-        return $this->belongsTo(Orders::class, 'id', 'id_order');
+        return $this->belongsTo(Orders::class, 'id_order', 'id');
     }
 
     public function product (){
-        return $this->belongsTo(Products::class, 'id', 'id_product');
+        return $this->belongsTo(Products::class, 'id_product', 'id');
     }
 
     public function ukuran(){
-        return $this->belongsTo(Variasi_Ukurans::class, 'id', 'id_ukuran');
+        return $this->belongsTo(Variasi_Ukurans::class, 'id_ukuran', 'id');
     }
 
     public function warna (){
-        return $this->belongsTo(Variasi_Warnas::class, 'id', 'id_warna');
+        return $this->belongsTo(Variasi_Warnas::class, 'id_warna', 'id');
     }
 }

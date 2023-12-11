@@ -2,6 +2,11 @@
 @section('content')
 
 <section id="multiple-column-form">
+    @if(session()->has('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+    @endif
     <div class="row match-height">
         <div class="col-12">
             <div class="card">
